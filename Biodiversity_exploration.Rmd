@@ -3,6 +3,7 @@ title: "Western Biodiversity Inventory - Exploration"
 author: "Jackson Kusack"
 date: "`r Sys.Date()`"
 output: html_document
+theme: paper
 
 params:
   download:
@@ -12,7 +13,8 @@ params:
     choices: [TRUE,FALSE]
 ---
 
-```{r setup, include=FALSE, comment=""}
+
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = "")
 ```
 
@@ -21,27 +23,14 @@ library(tidyverse)
 library(rinat)
 library(jsonlite)
 
-source("R/get_inat_user_stats_v2.R")
-source("C:/Users/jacks/Documents/GitHub/iNatTools/R/iNat_sc.R")
+source("C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/R/get_inat_user_stats_v2.R") # Modified function to allow for month specific queries
+source("C:/Users/jacks/Documents/GitHub/iNatTools/R/iNat_sc.R") # Modified function to fix error in code (forked from iNatTools main)
 ```
 
-## Observer Effort Data
-
-```{r eval = FALSE}
-# Create dataframes 
-observer.df <- data.frame(1:12,rep(0,12))
-names(observer.df) <- c('Month','Observers')
-
-# For loop to download data
-for (i in 1:12) {
-    observer.df[observer.df$Week == i] <- get_inat_user_stats_v2(project = "biodiversity-inventory-at-western", month = i)$total
-    Sys.sleep(1) # Make sure the loop takes at least 1s, to stay above the recommended API call limit
-}
-
-write.csv(observer.df, file = "Data/Observer/observer.df.csv", row.names = F)
-```
 
 ## Observation Data
+
+First we can download observation data for the Biodiversity Inventory at Western. This step can be run each time the code is run, but the processing time/download time is high, so by default it will only run if knit with the correct parameters. This saves a dataframe, locally, that contains all of the observations for the project. If the number of observations ever goes above 10,000 the code will need to modified to download subsets seperately as the maximum number of downloads using the API is 10,000. In that case, using the **get_inat_obs(...)** function would be easier.  
 
 ```{r eval = params$download}
 observations <- get_inat_obs_project("biodiversity-inventory-at-western", type = c("observations", "info"), raw = FALSE) %>%
@@ -50,9 +39,26 @@ observations <- get_inat_obs_project("biodiversity-inventory-at-western", type =
 write.csv(observations, file = "C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv", row.names = F)
 ```
 
-```{r eval = T, fig.width = 6.5, fig.height = 15}
-observations <- read.csv("Data/observation.df.csv")
+```{r echo = F}
+observations <- read.csv("C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv")
+```
 
+At the time of last download (`r fs::file_info("C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv")$modification_time`), there were `r nrow(observations)` observations. See below for a breakdown of number of observations, by taxonomic grouping:
+
+```{r}
+observations %>%
+  group_by(iconic_taxon.name) %>%
+  summarize(count = n()) %>%
+  print.data.frame(row.names = F)
+```
+
+## Observer Effort Data
+
+
+
+
+
+```{r eval = T, fig.width = 6.5, fig.height = 15}
 observations.summary <- observations %>%
   mutate('Month' = lubridate::month(lubridate::ymd(observed_on))) %>%
   rename('Taxon' = iconic_taxon.name) %>%
@@ -68,7 +74,7 @@ observations.summary <- observations %>%
   ylab('Observers (count)') + xlab('Month') + facet_wrap(~Taxon, scales = "free_y", ncol = 1) + 
   theme_linedraw() + theme(panel.grid = element_blank(), axis.text.x = element_text(size = 8)))
 
-png(filename = "Figures/Research_grade_observations_xMonth_xTaxon.png",
+png(filename = "C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Figures/Research_grade_observations_xMonth_xTaxon.png",
     res = 300, 
     width = 4, 
     height = 12,
@@ -77,11 +83,12 @@ p.obs
 dev.off()
 ```
 
+
 # Most recent species/genus added: top 50
 
-```{r}
-unique(observations$taxon.rank)
+As the iNaturalist webpage doesn't easily summarize which species / taxa was the most recently added to a project, we can use R to sort the observations by date. Obviously, this can also be done though exporting the data directly to a csv file, but R allows us to do this all at once. 
 
+```{r}
 observations %>% 
   filter(taxon.rank %in% c("species","genus","subspecies","complex","subgenus")) %>%
   group_by(taxon.common_name.name, taxon.name) %>%
@@ -91,16 +98,132 @@ observations %>%
   head(50)
 ```
 
-# Most rare species seen on campus: top 50
+
+
+# Most rare species seen on campus: 2022-2023 Inventory
 
 ```{r}
 observation.counts <- iNat_sc(project_id = 'biodiversity-inventory-at-western', quality_grade = "research", d1 = "2022-04-01", d2 = "2023-03-31")
 
-observation.counts %>% 
+rarity.df <- observation.counts %>% 
   arrange(taxon.observations_count) %>%
   select(count, taxon.observations_count, taxon.name, taxon.preferred_common_name) %>%
   rename('total.count' = taxon.observations_count) %>%
   rename('common.name' = taxon.preferred_common_name) %>%
-  data.frame() %>%
-  head(50)
+  data.frame()
+
+head(rarity.df, 50)
 ```
+
+```{r}
+observation.counts <- iNat_sc(project_id = 'city-nature-challenge-2023-london-on')
+observation.counts.research <- iNat_sc(project_id = 'city-nature-challenge-2023-london-on', quality_grade = "research")
+
+iNat_sc
+
+rarity.df <- observation.counts.research %>% 
+  arrange(taxon.observations_count) %>%
+  select(count, taxon.observations_count, taxon.name, taxon.preferred_common_name) %>%
+  rename('total.count' = taxon.observations_count) %>%
+  rename('common.name' = taxon.preferred_common_name) %>%
+  data.frame()
+
+head(rarity.df, 50)
+
+write.csv(rarity.df, 'rarity_df_RG.csv', row.names = F)
+
+getwd()
+```
+
+
+```{r echo = F}
+rare.1 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[1]]))
+rare.2 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[2]]))
+rare.3 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[3]]))
+rare.4 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[4]]))
+rare.5 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[5]]))
+```
+
+## Rarest
+
+1. `r rarity.df$taxon.name[1]`
+
+<kbd><center><img src="`r rare.1$observation_photos$photo$medium_url`"></center></kbd>
+
+`r rare.1$uri` 
+
+***
+
+2. `r rarity.df$taxon.name[2]`
+
+<kbd><center><img src="`r rare.2$observation_photos$photo$medium_url`"></center></kbd>
+
+`r rare.2$uri` 
+
+***
+
+3. `r rarity.df$taxon.name[3]`
+
+<kbd><center><img src="`r rare.3$observation_photos$photo$medium_url`"></center></kbd>
+
+`r rare.3$uri` 
+
+***
+
+4. `r rarity.df$taxon.name[4]`
+
+<kbd><center><img src="`r rare.4$observation_photos$photo$medium_url`"></center></kbd>
+
+`r rare.4$uri` 
+
+***
+
+5. `r rarity.df$taxon.name[5]`
+
+<kbd><center><img src="`r rare.5$observation_photos$photo$medium_url`"></center></kbd>
+
+`r rare.5$uri` 
+
+# Species accumulation curve
+
+```{r eval = F}
+table(lubridate::year(lubridate::as_date(observations$observed_on)))
+
+df <- data.frame(rep(0,8),rep(0,8)) 
+names(df) <- c('observations','taxa')
+
+for(i in seq_len(nrow(df))) {
+  
+  temp <- observations %>% 
+    mutate(observed_on = lubridate::as_date(observed_on)) %>%
+    filter(observed_on >= lubridate::as_date("1988-01-01") & 
+             observed_on < lubridate::as_date(paste(2014+i,"-01-01", sep="")))
+  df[i,1] <- nrow(temp)
+  df[i,2] <- length(unique(temp$taxon.name))
+}
+
+
+df <- data.frame(rep(0,12),rep(0,12)) 
+names(df) <- c('observations','taxa')
+
+for(i in seq_len(nrow(df))) {
+  
+  temp <- observations %>% 
+    mutate(observed_on = lubridate::as_date(observed_on)) %>%
+    filter(observed_on >= lubridate::as_date("2022-03-01") & 
+             observed_on < lubridate::as_date(if(i<10){paste("2022",i+3,"01", sep = "-")} else{paste("2023",i-9,"01", sep = "-")}))
+  df[i,1] <- nrow(temp)
+  df[i,2] <- length(unique(temp$taxon.name))
+}
+
+library(ggplot2)
+
+ggplot(data = df, aes(y = taxa, x = observations)) + 
+  geom_point() + 
+  stat_smooth(method = "lm", formula = y ~ poly(x,2), se = FALSE, col = "red", fullrange=TRUE) + 
+  labs(x = "Number of Observations", y = "Number of Taxa") +
+  xlim(0,10000) + ylim(0,3000) +
+  theme_classic()
+```
+
+Take this figure with a grain of salt, becuase observer biases come into play here... But last year the curve only just started to plateau near the last few months, indicating that there are plenty of new species to be discovered on campus. 
