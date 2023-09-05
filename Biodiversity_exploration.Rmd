@@ -133,8 +133,6 @@ head(rarity.df, 50)
 observation.counts <- iNat_sc(project_id = 'city-nature-challenge-2023-london-on')
 observation.counts.research <- iNat_sc(project_id = 'city-nature-challenge-2023-london-on', quality_grade = "research")
 
-iNat_sc
-
 rarity.df <- observation.counts.research %>% 
   arrange(taxon.observations_count) %>%
   select(count, taxon.observations_count, taxon.name, taxon.preferred_common_name) %>%
@@ -143,10 +141,7 @@ rarity.df <- observation.counts.research %>%
   data.frame()
 
 head(rarity.df, 50)
-
-write.csv(rarity.df, 'rarity_df_RG.csv', row.names = F)
-
-getwd()
+#write.csv(rarity.df, 'rarity_df_RG.csv', row.names = F)
 ```
 
 # Most rare species seen in inventory: All years
@@ -239,4 +234,24 @@ ggplot(data = df, aes(y = taxa, x = observations)) +
   theme_classic()
 ```
 
-Take this figure with a grain of salt, becuase observer biases come into play here... But last year the curve only just started to plateau near the last few months, indicating that there are plenty of new species to be discovered on campus. 
+Take this figure with a grain of salt, because observer biases come into play here... But last year the curve only just started to plateau near the last few months, indicating that there are plenty of new species to be discovered on campus. 
+
+# Most observed species that I'm missing
+
+```{r}
+jk.species <- observations %>%
+  filter(user_login == 'jacksonkusack') %>%
+  select(scientific_name) %>%
+  unique()
+
+observation.counts <- iNat_sc(project_id = 'biodiversity-inventory-at-western', quality_grade = "research") %>% 
+  arrange(desc(count)) %>%
+  select(count, taxon.name, taxon.preferred_common_name) %>%
+  rename('common.name' = taxon.preferred_common_name) %>%
+  data.frame() 
+
+jk.missing <- observation.counts %>%
+  subset(!(taxon.name %in% jk.species$scientific_name))
+
+head(jk.missing, 50)
+```
