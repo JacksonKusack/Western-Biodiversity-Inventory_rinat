@@ -25,8 +25,8 @@ library(rinat)
 library(jsonlite)
 library(ggplot2)
 
-source("C:/Users/Admin/Documents/GitHub/Western-Biodiversity-Inventory_rinat/R/get_inat_user_stats_v2.R") # Modified function to allow for month specific queries
-source("C:/Users/Admin/Documents/GitHub/iNatTools/R/iNat_sc.R") # Modified function to fix error in code (forked from iNatTools main)
+source("C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/R/get_inat_user_stats_v2.R") # Modified function to allow for month specific queries
+source("C:/Users/jacks/Documents/GitHub/iNatTools/R/iNat_sc.R") # Modified function to fix error in code (forked from iNatTools main)
 ```
 
 
@@ -48,14 +48,14 @@ observations <- rbind(get_inat_obs(place_id = 142216, month = 10, maxresults = 1
 observations <- rbind(get_inat_obs(place_id = 142216, month = 11, maxresults = 10000), observations) 
 observations <- rbind(get_inat_obs(place_id = 142216, month = 12, maxresults = 10000), observations) 
 
-write.csv(observations, file = "C:/Users/Admin/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv", row.names = F)
+write.csv(observations, file = "C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv", row.names = F)
 ```
 
 ```{r echo = F}
-observations <- read.csv("C:/Users/Admin/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv")
+observations <- read.csv("C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv")
 ```
 
-At the time of last download (`r fs::file_info("C:/Users/Admin/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv")$modification_time`), there were `r nrow(observations)` observations. See below for a breakdown of number of observations, by taxonomic grouping:
+At the time of last download (`r fs::file_info("C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation.df.csv")$modification_time`), there were `r nrow(observations)` observations. See below for a breakdown of number of observations, by taxonomic grouping:
 
 ```{r}
 observations %>%
@@ -86,7 +86,7 @@ observations.summary <- observations %>%
   ylab('Observers (count)') + xlab('Month') + facet_wrap(~Taxon, scales = "free_y", ncol = 1) + 
   theme_linedraw() + theme(panel.grid = element_blank(), axis.text.x = element_text(size = 8)))
 
-png(filename = "C:/Users/Admin/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Figures/Research_grade_observations_xMonth_xTaxon.png",
+png(filename = "C:/Users/jacks/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Figures/Research_grade_observations_xMonth_xTaxon.png",
     res = 300, 
     width = 4, 
     height = 14,
@@ -112,7 +112,9 @@ observations %>%
 
 
 
-# Most rare species seen on campus: 2022-2023 Inventory
+# Most rare species seen on campus: 
+
+## 2022-2023 Inventory
 
 ```{r}
 observation.counts <- iNat_sc(project_id = 'biodiversity-inventory-at-western', quality_grade = "research", d1 = "2022-04-01", d2 = "2023-03-31")
@@ -127,24 +129,8 @@ rarity.df <- observation.counts %>%
 head(rarity.df, 50)
 ```
 
-# Most rare species seen in city nature challenge
 
-```{r}
-observation.counts <- iNat_sc(project_id = 'city-nature-challenge-2023-london-on')
-observation.counts.research <- iNat_sc(project_id = 'city-nature-challenge-2023-london-on', quality_grade = "research")
-
-rarity.df <- observation.counts.research %>% 
-  arrange(taxon.observations_count) %>%
-  select(count, taxon.observations_count, taxon.name, taxon.preferred_common_name) %>%
-  rename('total.count' = taxon.observations_count) %>%
-  rename('common.name' = taxon.preferred_common_name) %>%
-  data.frame()
-
-head(rarity.df, 50)
-#write.csv(rarity.df, 'rarity_df_RG.csv', row.names = F)
-```
-
-# Most rare species seen in inventory: All years
+## All years
 
 ```{r}
 observation.counts <- iNat_sc(project_id = 'biodiversity-inventory-at-western', quality_grade = "research")
@@ -161,18 +147,18 @@ head(rarity.df, 50)
 
 
 ```{r echo = F}
-rare.1 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[1]]))
-rare.2 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[2]]))
-rare.3 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[3]]))
-rare.4 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[4]]))
-rare.5 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rarity.df$taxon.name[5]]))
+rare.1 <- get_inat_obs_id(na.omit(observations$id[observations$scientific_name == rarity.df$taxon.name[1]])[1])
+rare.2 <- get_inat_obs_id(na.omit(observations$id[observations$scientific_name == rarity.df$taxon.name[2]])[1])
+rare.3 <- get_inat_obs_id(na.omit(observations$id[observations$scientific_name == rarity.df$taxon.name[3]])[1])
+rare.4 <- get_inat_obs_id(na.omit(observations$id[observations$scientific_name == rarity.df$taxon.name[4]])[1])
+rare.5 <- get_inat_obs_id(na.omit(observations$id[observations$scientific_name == rarity.df$taxon.name[5]])[1])
 ```
 
 ## Rarest
 
 1. `r rarity.df$taxon.name[1]`
 
-<kbd><center><img src="`r rare.1$observation_photos$photo$medium_url`"></center></kbd>
+<kbd><center><img src="`r rare.1$observation_photos$photo$medium_url[1]`"></center></kbd>
 
 `r rare.1$uri` 
 
@@ -180,7 +166,7 @@ rare.5 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rar
 
 2. `r rarity.df$taxon.name[2]`
 
-<kbd><center><img src="`r rare.2$observation_photos$photo$medium_url`"></center></kbd>
+<kbd><center><img src="`r rare.2$observation_photos$photo$medium_url[1]`"></center></kbd>
 
 `r rare.2$uri` 
 
@@ -188,7 +174,7 @@ rare.5 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rar
 
 3. `r rarity.df$taxon.name[3]`
 
-<kbd><center><img src="`r rare.3$observation_photos$photo$medium_url`"></center></kbd>
+<kbd><center><img src="`r rare.3$observation_photos$photo$medium_url[1]`"></center></kbd>
 
 `r rare.3$uri` 
 
@@ -196,7 +182,7 @@ rare.5 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rar
 
 4. `r rarity.df$taxon.name[4]`
 
-<kbd><center><img src="`r rare.4$observation_photos$photo$medium_url`"></center></kbd>
+<kbd><center><img src="`r rare.4$observation_photos$photo$medium_url[1]`"></center></kbd>
 
 `r rare.4$uri` 
 
@@ -204,7 +190,7 @@ rare.5 <- get_inat_obs_id(na.omit(observations$id[observations$taxon.name == rar
 
 5. `r rarity.df$taxon.name[5]`
 
-<kbd><center><img src="`r rare.5$observation_photos$photo$medium_url`"></center></kbd>
+<kbd><center><img src="`r rare.5$observation_photos$photo$medium_url[1]`"></center></kbd>
 
 `r rare.5$uri` 
 
@@ -226,12 +212,12 @@ for(i in seq_len(nrow(df))) {
   df[i,2] <- length(unique(temp$taxon_id))
 }
 
-ggplot(data = df, aes(y = taxa, x = observations)) + 
+print(ggplot(data = df, aes(y = taxa, x = observations)) + 
   geom_point() + 
   stat_smooth(method = "lm", formula = y ~ poly(x,2), se = FALSE, col = "red", fullrange=TRUE) + 
   labs(x = "Number of Observations", y = "Number of Taxa") +
   xlim(0,10000) + ylim(0,3000) +
-  theme_classic()
+  theme_classic())
 ```
 
 Take this figure with a grain of salt, because observer biases come into play here... But last year the curve only just started to plateau near the last few months, indicating that there are plenty of new species to be discovered on campus. 
@@ -246,6 +232,7 @@ jk.species <- observations %>%
 
 observation.counts <- iNat_sc(project_id = 'biodiversity-inventory-at-western', quality_grade = "research") %>% 
   arrange(desc(count)) %>%
+  filter(taxon.iconic_taxon_name != "Aves") %>%
   select(count, taxon.name, taxon.preferred_common_name) %>%
   rename('common.name' = taxon.preferred_common_name) %>%
   data.frame() 
