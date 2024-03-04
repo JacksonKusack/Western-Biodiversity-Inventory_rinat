@@ -8,10 +8,12 @@ Here I mainly use functions from the *rinat* package (with some modifications to
 
 1. Observer effort
 
-
-
 2. Most recently added species
 
-3. 'Rare' species 
+3. 'Rare' species - globally
 
-4. ...
+4. Target species (for me)
+
+5. 'Rare' species - Ontario and middlesex county
+
+6. First firsts for Middlesex
