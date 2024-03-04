@@ -241,7 +241,9 @@ head(jk.missing, 50)
 
 # Code for Peter
 
-Pull out species with <= 10 observations within Ontario. Note that I am only using the research grade observations here, but you could repeat this with the needs-id records too. The same theory applies 
+## Rare observations (<= 10 ON records)
+
+Pull out species with <= 10 observations within Ontario and check for records of those species in the inventory. 
 
 ```{r}
 #https://inaturalist.ca/projects/biodiversity-of-ontario
@@ -255,6 +257,7 @@ observations %>% # filter the inventory records that match the taxa above
   filter(quality_grade %in% c("research","needs_id"))
 ```
 
+## Rare observations (<= 10 middlesex records)
 
 ```{r}
 # Same thing but with middlesex county
@@ -267,7 +270,9 @@ observations %>% # filter the inventory records that match the taxa above
   filter(quality_grade %in% c("research","needs_id"))
 ```
 
-Too determine what the first firsts are for Middlesex, we need to download all the middlesex data (which is going to take a bit of time and too many records to do using 'get_inat_obs'. Luckily there aren't more that 200,000 observations, so we can just export the file on the website. 
+## Middlesex county first firsts
+
+Too determine what the first firsts are for Middlesex, we need to download all the middlesex data (which is going to take a bit of time and too many records to do using 'get_inat_obs'). Luckily there aren't more that 200,000 observations, so we can just export the file on the website. 
 
 If you want to repeat this, you'll need to download that file. 
 

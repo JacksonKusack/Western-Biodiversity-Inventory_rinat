@@ -794,9 +794,10 @@ head(jk.missing, 50)</code></pre>
 </div>
 <div id="code-for-peter" class="section level1">
 <h1>Code for Peter</h1>
-<p>Pull out species with &lt;= 10 observations within Ontario. Note that
-I am only using the research grade observations here, but you could
-repeat this with the needs-id records too. The same theory applies</p>
+<div id="rare-observations-10-on-records" class="section level2">
+<h2>Rare observations (&lt;= 10 ON records)</h2>
+<p>Pull out species with &lt;= 10 observations within Ontario and check
+for records of those species in the inventory.</p>
 <pre class="r"><code>#https://inaturalist.ca/projects/biodiversity-of-ontario
 
 ontario.species &lt;- iNat_sc(project_id = 29563) %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
@@ -917,6 +918,9 @@ observations %&gt;% # filter the inventory records that match the taxa above
 108          Allocapnia granulata      needs_id
 109            Ceriporia purpurea      research
 110             Gymnopus foetidus      research</code></pre>
+</div>
+<div id="rare-observations-10-middlesex-records" class="section level2">
+<h2>Rare observations (&lt;= 10 middlesex records)</h2>
 <pre class="r"><code># Same thing but with middlesex county
 middlesex.species &lt;- iNat_sc(project_id = 29563) %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
   filter(count &lt;= 10) # Pull out taxa that have less than or equal to 10 in middlesex
@@ -1036,9 +1040,12 @@ observations %&gt;% # filter the inventory records that match the taxa above
 108          Allocapnia granulata      needs_id
 109            Ceriporia purpurea      research
 110             Gymnopus foetidus      research</code></pre>
+</div>
+<div id="middlesex-county-first-firsts" class="section level2">
+<h2>Middlesex county first firsts</h2>
 <p>Too determine what the first firsts are for Middlesex, we need to
 download all the middlesex data (which is going to take a bit of time
-and too many records to do using ‘get_inat_obs’. Luckily there aren’t
+and too many records to do using ‘get_inat_obs’). Luckily there aren’t
 more that 200,000 observations, so we can just export the file on the
 website.</p>
 <p>If you want to repeat this, you’ll need to download that file.</p>
@@ -1220,6 +1227,7 @@ below).</p>
 157                               Diamesa      needs_id 150659008  2023-03-09
 158                     Lewinskya affinis      research 146824311  2023-01-17
 159                     Gymnopus foetidus      research 145678755  2023-01-02</code></pre>
+</div>
 </div>
 
 
