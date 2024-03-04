@@ -32,7 +32,7 @@ source("C:/Users/Admin/Documents/GitHub/iNatTools/R/iNat_sc.R") # Modified funct
 
 ## Observation Data
 
-First we can download observation data for the Biodiversity Inventory at Western. This step can be run each time the code is run, but the processing time/download time is high, so by default it will only run if knit with the correct parameters. This saves a dataframe, locally, that contains all of the observations for the project. If the number of observations ever goes above 10,000 the code will need to modified to download subsets seperately as the maximum number of downloads using the API is 10,000. In that case, using the **get_inat_obs(...)** function would be easier.  
+First we can download observation data for the Biodiversity Inventory at Western. This step can be run each time the code is run, but the processing time/download time is high, so by default it will only download the data if knit with the correct parameters. This saves a dataframe, locally, that contains all of the observations for the project. If the number of observations ever goes above 10,000 the code will need to modified to download subsets separately as the maximum number of downloads using the API is 10,000. In that case, using the **get_inat_obs(...)** function would be easier.  
 
 ```{r eval = params$download}
 observations <- get_inat_obs(place_id = 142216, month = 1, maxresults = 10000) 
@@ -65,10 +65,6 @@ observations %>%
 ```
 
 ## Observer Effort Data
-
-
-
-
 
 ```{r eval = T, fig.width = 6.5, fig.height = 15}
 observations.summary <- observations %>%
@@ -105,7 +101,7 @@ observations %>%
   group_by(scientific_name) %>%
   slice_min(order_by = observed_on) %>%
   arrange(desc(observed_on)) %>%
-  select(scientific_name, observed_on, user_name) %>%
+  dplyr::select(scientific_name, observed_on, user_name) %>%
   data.frame() %>%
   head(50)
 ```
@@ -121,7 +117,7 @@ observation.counts <- iNat_sc(project_id = 'biodiversity-inventory-at-western', 
 
 rarity.df <- observation.counts %>% 
   arrange(taxon.observations_count) %>%
-  select(count, taxon.observations_count, taxon.name, taxon.preferred_common_name) %>%
+  dplyr::select(count, taxon.observations_count, taxon.name, taxon.preferred_common_name) %>%
   rename('total.count' = taxon.observations_count) %>%
   rename('common.name' = taxon.preferred_common_name) %>%
   data.frame()
@@ -220,7 +216,7 @@ print(ggplot(data = df, aes(y = taxa, x = observations)) +
   theme_classic())
 ```
 
-Take this figure with a grain of salt, because observer biases come into play here... But last year the curve only just started to plateau near the last few months, indicating that there are plenty of new species to be discovered on campus. 
+Take this figure with a grain of salt, because observer biases come into play here... But last year the curve only just started to plateau near the last few months, indicating that there are plenty of new species to be discovered on campus. Not too surprising though. 
 
 # Most observed species that I'm missing
 
@@ -233,7 +229,7 @@ jk.species <- observations %>%
 observation.counts <- iNat_sc(project_id = 'biodiversity-inventory-at-western', quality_grade = "research") %>% 
   arrange(desc(count)) %>%
   filter(taxon.iconic_taxon_name != "Aves") %>%
-  select(count, taxon.name, taxon.preferred_common_name) %>%
+  dplyr::select(count, taxon.name, taxon.preferred_common_name) %>%
   rename('common.name' = taxon.preferred_common_name) %>%
   data.frame() 
 
@@ -242,3 +238,59 @@ jk.missing <- observation.counts %>%
 
 head(jk.missing, 50)
 ```
+
+# Code for Peter
+
+Pull out species with <= 10 observations within Ontario. Note that I am only using the research grade observations here, but you could repeat this with the needs-id records too. The same theory applies 
+
+```{r}
+#https://inaturalist.ca/projects/biodiversity-of-ontario
+
+ontario.species <- iNat_sc(project_id = 29563) %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count <= 10) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %>% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% ontario.species$taxon.name) %>%
+  dplyr::select(scientific_name, quality_grade) %>%
+  filter(quality_grade %in% c("research","needs_id"))
+```
+
+
+```{r}
+# Same thing but with middlesex county
+middlesex.species <- iNat_sc(project_id = 29563) %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count <= 10) # Pull out taxa that have less than or equal to 10 in middlesex
+  
+observations %>% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% middlesex.species$taxon.name) %>%
+  dplyr::select(scientific_name, quality_grade) %>%
+  filter(quality_grade %in% c("research","needs_id"))
+```
+
+Too determine what the first firsts are for Middlesex, we need to download all the middlesex data (which is going to take a bit of time and too many records to do using 'get_inat_obs'. Luckily there aren't more that 200,000 observations, so we can just export the file on the website. 
+
+If you want to repeat this, you'll need to download that file. 
+
+```{r}
+observations.middlesex <- read.csv("C:/Users/Admin/Documents/GitHub/Western-Biodiversity-Inventory_rinat/Data/observation_middlesex.csv")
+
+# First firsts for middlesex county (within the timeframe of the survey)
+first.firsts.middlesex <- observations.middlesex %>% 
+  group_by(scientific_name) %>%
+  slice_min(order_by = observed_on) %>%
+  mutate(date = as_date(observed_on)) %>%
+  arrange(desc(date)) %>%
+  dplyr::select(scientific_name, date, user_name, id) %>%
+  data.frame() %>%
+  filter(date >= as_date("2022-04-01"),
+         date <= as_date("2023-03-31"))
+```
+
+Once we have the first firsts for middlesex county - we just need to use those ID's to see which of them were seen within the inventory (see below).
+
+```{r}
+observations[observations$id %in% unique(first.firsts.middlesex$id),] %>%
+  dplyr::select(scientific_name, quality_grade, id, observed_on) %>%
+  filter(quality_grade %in% c("research","needs_id"))
+```
+
