@@ -192,7 +192,7 @@ rare.5 <- get_inat_obs_id(na.omit(observations$id[observations$scientific_name =
 
 # Species accumulation curve: By year
 
-```{r eval = F}
+```{r}
 table(lubridate::year(lubridate::as_date(observations$observed_on)))
 
 df <- data.frame(rep(0,10),rep(0,10)) 
@@ -248,11 +248,37 @@ Pull out species with <= 10 observations within Ontario and check for records of
 ```{r}
 #https://inaturalist.ca/projects/biodiversity-of-ontario
 
-ontario.species <- iNat_sc(project_id = 29563) %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+ontario.species <- iNat_sc(project_id = 29563) 
+
+ON.10 <- ontario.species %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
   filter(count <= 10) # Pull out taxa that have less than or equal to 10 in ON
 
 observations %>% # filter the inventory records that match the taxa above
-  filter(scientific_name %in% ontario.species$taxon.name) %>%
+  filter(scientific_name %in% ON.10$taxon.name) %>%
+  dplyr::select(scientific_name, quality_grade) %>%
+  filter(quality_grade %in% c("research","needs_id"))
+```
+
+## Rare observations (<= 5 ON records)
+
+```{r}
+ON.5 <- ontario.species %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count <= 5) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %>% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% ON.5$taxon.name) %>%
+  dplyr::select(scientific_name, quality_grade) %>%
+  filter(quality_grade %in% c("research","needs_id"))
+```
+
+## Rare observations (<= 3 ON records)
+
+```{r}
+ON.3 <- ontario.species %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count <= 3) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %>% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% ON.3$taxon.name) %>%
   dplyr::select(scientific_name, quality_grade) %>%
   filter(quality_grade %in% c("research","needs_id"))
 ```
@@ -261,11 +287,37 @@ observations %>% # filter the inventory records that match the taxa above
 
 ```{r}
 # Same thing but with middlesex county
-middlesex.species <- iNat_sc(project_id = 29563) %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+middlesex.species <- iNat_sc(project_id = 29563) 
+
+middlesex.10 <- middlesex.species %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
   filter(count <= 10) # Pull out taxa that have less than or equal to 10 in middlesex
   
 observations %>% # filter the inventory records that match the taxa above
-  filter(scientific_name %in% middlesex.species$taxon.name) %>%
+  filter(scientific_name %in% middlesex.10$taxon.name) %>%
+  dplyr::select(scientific_name, quality_grade) %>%
+  filter(quality_grade %in% c("research","needs_id"))
+```
+
+## Rare observations (<= 5 ON records)
+
+```{r}
+middlesex.5 <- middlesex.species %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count <= 5) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %>% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% middlesex.5$taxon.name) %>%
+  dplyr::select(scientific_name, quality_grade) %>%
+  filter(quality_grade %in% c("research","needs_id"))
+```
+
+## Rare observations (<= 3 ON records)
+
+```{r}
+middlesex.3 <- middlesex.species %>% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count <= 3) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %>% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% middlesex.3$taxon.name) %>%
   dplyr::select(scientific_name, quality_grade) %>%
   filter(quality_grade %in% c("research","needs_id"))
 ```

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Adminon Kusack" />
 
-<meta name="date" content="2024-03-04" />
+<meta name="date" content="2024-03-05" />
 
 <title>Western Biodiversity Inventory - Exploration</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Western Biodiversity Inventory -
 Exploration</h1>
 <h4 class="author">Adminon Kusack</h4>
-<h4 class="date">2024-03-04</h4>
+<h4 class="date">2024-03-05</h4>
 
 </div>
 
@@ -540,12 +540,12 @@ head(rarity.df, 50)</code></pre>
 12     1         157      Pediopsoides distinctus                          &lt;NA&gt;
 13     1         197             Rhagovelia obesa                          &lt;NA&gt;
 14     1         274         Amblysellus curtisii                          &lt;NA&gt;
-15     1         291            Gymnopus foetidus              Foetid Parachute
+15     1         292            Gymnopus foetidus              Foetid Parachute
 16     1         312       Macrophya punctumalbum                 Privet Sawfly
 17     1         343           Moxostoma anisurum               Silver Redhorse
 18     3         360            Notropis rubellus               Rosyface Shiner
 19     1         393           Mesovelia mulsanti       Mulsant&#39;s Water Treader
-20     3         396          Allocapnia vivipara             Shortwing Snowfly
+20     3         398          Allocapnia vivipara             Shortwing Snowfly
 21     1         401                Glipa oculata                          &lt;NA&gt;
 22     1         419            Papaipema furcata            Ash Tip Borer Moth
 23     2         440         Plutella porrectella            Dame&#39;s Rocket Moth
@@ -555,21 +555,21 @@ head(rarity.df, 50)</code></pre>
 27     1         486         Gaurotes cyanipennis                          &lt;NA&gt;
 28     1         488        Trepobates subnitidus                          &lt;NA&gt;
 29     1         498      Olethreutes quadrifidum                          &lt;NA&gt;
-30     2         506     Tricrania sanguinipennis   Blood-winged Blister Beetle
+30     2         508     Tricrania sanguinipennis   Blood-winged Blister Beetle
 31     1         529     Moxostoma macrolepidotum            Shorthead Redhorse
 32     3         537    Agonopterix curvilineella Curved-lined Agonopterix Moth
 33     1         540        Alasmidonta marginata                        Elktoe
 34     1         540         Euthycera flavescens                          &lt;NA&gt;
 35     1         555               Pimpla pedalis                          &lt;NA&gt;
-36     1         573        Cratoneuron filicinum         fern-leaved hook-moss
-37     1         576    Aulacomnium heterostichum                Goose Egg Moss
-38     2         597             Limonia annulata                          &lt;NA&gt;
-39     1         601          Scathophaga furcata                          &lt;NA&gt;
-40     1         629         Strophitus undulatus                       Creeper
+36     1         574        Cratoneuron filicinum         fern-leaved hook-moss
+37     1         584    Aulacomnium heterostichum                Goose Egg Moss
+38     2         599             Limonia annulata                          &lt;NA&gt;
+39     1         607          Scathophaga furcata                          &lt;NA&gt;
+40     1         628         Strophitus undulatus                       Creeper
 41     1         635           Lintneria eremitus                 Hermit Sphinx
 42     1         652        Phellinopsis conchata                          &lt;NA&gt;
 43     1         673         Loweomyces fractipes                          &lt;NA&gt;
-44     1         687               Aethes biscana                Reddish Aethes
+44     1         688               Aethes biscana                Reddish Aethes
 45     1         692           Habrosyne gloriosa       Glorious Habrosyne Moth
 46     1         694         Aurantioporthe corni         dogwood golden canker
 47     1         704       Ancistrocerus catskill          Catskill Potter Wasp
@@ -618,7 +618,7 @@ head(rarity.df, 50)</code></pre>
 26     1         103         Temnostoma barberi          Bare-bellied Falsehorn
 27     1         107           Myopa vesiculosa                            &lt;NA&gt;
 28     1         110  Hemicrepidius decoloratus                            &lt;NA&gt;
-29     1         113         Ceriporia purpurea                            &lt;NA&gt;
+29     1         114         Ceriporia purpurea                            &lt;NA&gt;
 30     2         118             Oberea affinis            Raspberry Cane Borer
 31     1         129              Sapyga louisi Louis&#39;s Club-horned Cuckoo Wasp
 32     1         134    Yakuhananomia bidentata                            &lt;NA&gt;
@@ -639,7 +639,7 @@ head(rarity.df, 50)</code></pre>
 47     1         202          Tricholoma odorum                            &lt;NA&gt;
 48     2         210           Agrilus lecontei             LeConte&#39;s Buprestid
 49     1         213           Cardamine maxima                 large toothwort
-50     1         219             Sereda tautana            Speckled Sereda Moth</code></pre>
+50     1         220             Sereda tautana            Speckled Sereda Moth</code></pre>
 </div>
 <div id="rarest" class="section level2">
 <h2>Rarest</h2>
@@ -696,9 +696,13 @@ head(rarity.df, 50)</code></pre>
 </div>
 <div id="species-accumulation-curve-by-year" class="section level1">
 <h1>Species accumulation curve: By year</h1>
-<pre class="r"><code>table(lubridate::year(lubridate::as_date(observations$observed_on)))
-
-df &lt;- data.frame(rep(0,10),rep(0,10)) 
+<pre class="r"><code>table(lubridate::year(lubridate::as_date(observations$observed_on)))</code></pre>
+<pre><code>
+1988 1990 1993 2005 2007 2009 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 
+   3   10    1    6    1    3    2   12   11   16    3    3    4   37  136 1260 
+2020 2021 2022 2023 2024 
+ 437 2061 3089 5098   34 </code></pre>
+<pre class="r"><code>df &lt;- data.frame(rep(0,10),rep(0,10)) 
 names(df) &lt;- c(&#39;observations&#39;,&#39;taxa&#39;)
 
 for(i in seq_len(nrow(df))) {
@@ -717,6 +721,9 @@ print(ggplot(data = df, aes(y = taxa, x = observations)) +
   labs(x = &quot;Number of Observations&quot;, y = &quot;Number of Taxa&quot;) +
   xlim(0,10000) + ylim(0,3000) +
   theme_classic())</code></pre>
+<pre><code>Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).</code></pre>
+<pre><code>Warning: Removed 1 rows containing missing values (`geom_point()`).</code></pre>
+<p><img src="data:image/png;base64,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" width="672" /></p>
 <p>Take this figure with a grain of salt, because observer biases come
 into play here… But last year the curve only just started to plateau
 near the last few months, indicating that there are plenty of new
@@ -800,11 +807,13 @@ head(jk.missing, 50)</code></pre>
 for records of those species in the inventory.</p>
 <pre class="r"><code>#https://inaturalist.ca/projects/biodiversity-of-ontario
 
-ontario.species &lt;- iNat_sc(project_id = 29563) %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+ontario.species &lt;- iNat_sc(project_id = 29563) 
+
+ON.10 &lt;- ontario.species %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
   filter(count &lt;= 10) # Pull out taxa that have less than or equal to 10 in ON
 
 observations %&gt;% # filter the inventory records that match the taxa above
-  filter(scientific_name %in% ontario.species$taxon.name) %&gt;%
+  filter(scientific_name %in% ON.10$taxon.name) %&gt;%
   dplyr::select(scientific_name, quality_grade) %&gt;%
   filter(quality_grade %in% c(&quot;research&quot;,&quot;needs_id&quot;))</code></pre>
 <pre><code>                  scientific_name quality_grade
@@ -883,50 +892,204 @@ observations %&gt;% # filter the inventory records that match the taxa above
 73                    Ablabesmyia      needs_id
 74        Lasiopogon tetragrammus      needs_id
 75                     Sarcophaga      needs_id
-76                     Sarcophaga      needs_id
-77                 Salvia sclarea      research
-78             Strauzia vittigera      research
-79                          Salix      needs_id
-80                Zelkova serrata      research
-81       Aureobasidium apocryptum      research
+76             Gastrophysa cyanea      needs_id
+77                     Sarcophaga      needs_id
+78                 Salvia sclarea      research
+79             Strauzia vittigera      research
+80                          Salix      needs_id
+81                Zelkova serrata      research
 82       Aureobasidium apocryptum      research
-83       Aureobasidium apocryptum      needs_id
-84                Laphria sericea      needs_id
-85             Leptopeza flavipes      research
-86             Strauzia vittigera      needs_id
+83       Aureobasidium apocryptum      research
+84       Aureobasidium apocryptum      needs_id
+85                Laphria sericea      needs_id
+86             Leptopeza flavipes      research
 87             Strauzia vittigera      needs_id
-88          Athyroglossa ordinata      research
-89           Dendrothele alliacea      needs_id
-90           Salvia × floriferior      needs_id
-91                Zelkova serrata      research
-92                Lepiota lilacea      research
-93          Hohenbuehelia thornii      needs_id
-94               Strigamia bidens      needs_id
-95   Trigoniophthalmus alternatus      needs_id
-96            Gastrodes grossipes      needs_id
-97             Chlaenius aestivus      needs_id
-98                          Salix      needs_id
-99                Zelkova serrata      needs_id
-100                       Docosia      needs_id
-101                         Salix      needs_id
-102                  Aulacigaster      needs_id
-103              Andrena hippotes      research
-104             Taphrina betulina      needs_id
-105          Notoedres centrifera      needs_id
-106          Allocapnia granulata      needs_id
+88             Strauzia vittigera      needs_id
+89          Athyroglossa ordinata      research
+90           Dendrothele alliacea      needs_id
+91           Salvia × floriferior      needs_id
+92                Zelkova serrata      research
+93                Lepiota lilacea      research
+94          Hohenbuehelia thornii      needs_id
+95               Strigamia bidens      needs_id
+96   Trigoniophthalmus alternatus      needs_id
+97            Gastrodes grossipes      needs_id
+98             Chlaenius aestivus      needs_id
+99                          Salix      needs_id
+100               Zelkova serrata      needs_id
+101                       Docosia      needs_id
+102                         Salix      needs_id
+103                  Aulacigaster      needs_id
+104              Andrena hippotes      research
+105             Taphrina betulina      needs_id
+106          Notoedres centrifera      needs_id
 107          Allocapnia granulata      needs_id
 108          Allocapnia granulata      needs_id
-109            Ceriporia purpurea      research
-110             Gymnopus foetidus      research</code></pre>
+109          Allocapnia granulata      needs_id
+110            Ceriporia purpurea      research
+111             Gymnopus foetidus      research</code></pre>
+</div>
+<div id="rare-observations-5-on-records" class="section level2">
+<h2>Rare observations (&lt;= 5 ON records)</h2>
+<pre class="r"><code>ON.5 &lt;- ontario.species %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count &lt;= 5) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %&gt;% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% ON.5$taxon.name) %&gt;%
+  dplyr::select(scientific_name, quality_grade) %&gt;%
+  filter(quality_grade %in% c(&quot;research&quot;,&quot;needs_id&quot;))</code></pre>
+<pre><code>                 scientific_name quality_grade
+1                          Salix      needs_id
+2           Melilotus altissimus      research
+3              Lentinus flexipes      needs_id
+4                 Mycena galopus      needs_id
+5                        Lepiota      needs_id
+6             Atriplex hortensis      needs_id
+7                          Salix      needs_id
+8                 Neopachygaster      needs_id
+9             Trepobates inermis      research
+10                 Triplax aenea      needs_id
+11                Heteromeringia      needs_id
+12                         Geron      needs_id
+13            Trepobates inermis      research
+14         Arhyssus nigristernum      needs_id
+15       Anthopotamus distinctus      needs_id
+16                 Laphria canis      needs_id
+17        Toxorhynchites rutilus      research
+18                    Sarcophaga      needs_id
+19                 Laphria canis      needs_id
+20            Trepobates inermis      research
+21     Clytoleptus albofasciatus      needs_id
+22                        Oodera      needs_id
+23          Lasioglossum pilosum      needs_id
+24        Pissonotus aphidioides      research
+25              Leiobunum flavum      needs_id
+26                        Oodera      needs_id
+27           Volvariella pusilla      research
+28               Aulacus burquei      research
+29                   Dectes sayi      research
+30               Laphria sericea      needs_id
+31           Entoloma byssisedum      needs_id
+32                    Sarcophaga      needs_id
+33                         Salix      needs_id
+34                 Laphria canis      needs_id
+35                    Sarcophaga      needs_id
+36                 Laphria canis      needs_id
+37 Cordyligaster septentrionalis      needs_id
+38            Enchenopa binotata      needs_id
+39                 Laphria canis      needs_id
+40                 Myrmex myrmex      needs_id
+41     Evacanthus nigramericanus      needs_id
+42                Minettia magna      research
+43                 Laphria canis      needs_id
+44             Acalles carinatus      needs_id
+45                   Coprinellus      needs_id
+46               Ilnacora malina      needs_id
+47                       Stegana      needs_id
+48                Puccinia allii      research
+49                 Laphria canis      needs_id
+50            Metapelma schwarzi      needs_id
+51             Neurigona rubella      research
+52           Geranomyia communis      needs_id
+53                   Ablabesmyia      needs_id
+54       Lasiopogon tetragrammus      needs_id
+55                    Sarcophaga      needs_id
+56                    Sarcophaga      needs_id
+57                Salvia sclarea      research
+58                         Salix      needs_id
+59      Aureobasidium apocryptum      research
+60      Aureobasidium apocryptum      research
+61      Aureobasidium apocryptum      needs_id
+62               Laphria sericea      needs_id
+63            Leptopeza flavipes      research
+64         Athyroglossa ordinata      research
+65          Dendrothele alliacea      needs_id
+66          Salvia × floriferior      needs_id
+67               Lepiota lilacea      research
+68         Hohenbuehelia thornii      needs_id
+69              Strigamia bidens      needs_id
+70            Chlaenius aestivus      needs_id
+71                         Salix      needs_id
+72                       Docosia      needs_id
+73                         Salix      needs_id
+74          Notoedres centrifera      needs_id
+75            Ceriporia purpurea      research
+76             Gymnopus foetidus      research</code></pre>
+</div>
+<div id="rare-observations-3-on-records" class="section level2">
+<h2>Rare observations (&lt;= 3 ON records)</h2>
+<pre class="r"><code>ON.3 &lt;- ontario.species %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count &lt;= 3) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %&gt;% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% ON.3$taxon.name) %&gt;%
+  dplyr::select(scientific_name, quality_grade) %&gt;%
+  filter(quality_grade %in% c(&quot;research&quot;,&quot;needs_id&quot;))</code></pre>
+<pre><code>           scientific_name quality_grade
+1                    Salix      needs_id
+2        Lentinus flexipes      needs_id
+3                  Lepiota      needs_id
+4                    Salix      needs_id
+5           Neopachygaster      needs_id
+6       Trepobates inermis      research
+7            Triplax aenea      needs_id
+8           Heteromeringia      needs_id
+9       Trepobates inermis      research
+10 Anthopotamus distinctus      needs_id
+11           Laphria canis      needs_id
+12  Toxorhynchites rutilus      research
+13              Sarcophaga      needs_id
+14           Laphria canis      needs_id
+15      Trepobates inermis      research
+16    Lasioglossum pilosum      needs_id
+17  Pissonotus aphidioides      research
+18             Dectes sayi      research
+19         Laphria sericea      needs_id
+20              Sarcophaga      needs_id
+21                   Salix      needs_id
+22           Laphria canis      needs_id
+23              Sarcophaga      needs_id
+24           Laphria canis      needs_id
+25      Enchenopa binotata      needs_id
+26           Laphria canis      needs_id
+27           Myrmex myrmex      needs_id
+28          Minettia magna      research
+29           Laphria canis      needs_id
+30       Acalles carinatus      needs_id
+31             Coprinellus      needs_id
+32          Puccinia allii      research
+33           Laphria canis      needs_id
+34      Metapelma schwarzi      needs_id
+35       Neurigona rubella      research
+36             Ablabesmyia      needs_id
+37 Lasiopogon tetragrammus      needs_id
+38              Sarcophaga      needs_id
+39              Sarcophaga      needs_id
+40          Salvia sclarea      research
+41                   Salix      needs_id
+42         Laphria sericea      needs_id
+43      Leptopeza flavipes      research
+44   Athyroglossa ordinata      research
+45    Dendrothele alliacea      needs_id
+46    Salvia × floriferior      needs_id
+47         Lepiota lilacea      research
+48   Hohenbuehelia thornii      needs_id
+49        Strigamia bidens      needs_id
+50                   Salix      needs_id
+51                   Salix      needs_id
+52    Notoedres centrifera      needs_id
+53      Ceriporia purpurea      research</code></pre>
 </div>
 <div id="rare-observations-10-middlesex-records" class="section level2">
 <h2>Rare observations (&lt;= 10 middlesex records)</h2>
 <pre class="r"><code># Same thing but with middlesex county
-middlesex.species &lt;- iNat_sc(project_id = 29563) %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+middlesex.species &lt;- iNat_sc(project_id = 29563) 
+
+middlesex.10 &lt;- middlesex.species %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
   filter(count &lt;= 10) # Pull out taxa that have less than or equal to 10 in middlesex
   
 observations %&gt;% # filter the inventory records that match the taxa above
-  filter(scientific_name %in% middlesex.species$taxon.name) %&gt;%
+  filter(scientific_name %in% middlesex.10$taxon.name) %&gt;%
   dplyr::select(scientific_name, quality_grade) %&gt;%
   filter(quality_grade %in% c(&quot;research&quot;,&quot;needs_id&quot;))</code></pre>
 <pre><code>                  scientific_name quality_grade
@@ -1005,41 +1168,193 @@ observations %&gt;% # filter the inventory records that match the taxa above
 73                    Ablabesmyia      needs_id
 74        Lasiopogon tetragrammus      needs_id
 75                     Sarcophaga      needs_id
-76                     Sarcophaga      needs_id
-77                 Salvia sclarea      research
-78             Strauzia vittigera      research
-79                          Salix      needs_id
-80                Zelkova serrata      research
-81       Aureobasidium apocryptum      research
+76             Gastrophysa cyanea      needs_id
+77                     Sarcophaga      needs_id
+78                 Salvia sclarea      research
+79             Strauzia vittigera      research
+80                          Salix      needs_id
+81                Zelkova serrata      research
 82       Aureobasidium apocryptum      research
-83       Aureobasidium apocryptum      needs_id
-84                Laphria sericea      needs_id
-85             Leptopeza flavipes      research
-86             Strauzia vittigera      needs_id
+83       Aureobasidium apocryptum      research
+84       Aureobasidium apocryptum      needs_id
+85                Laphria sericea      needs_id
+86             Leptopeza flavipes      research
 87             Strauzia vittigera      needs_id
-88          Athyroglossa ordinata      research
-89           Dendrothele alliacea      needs_id
-90           Salvia × floriferior      needs_id
-91                Zelkova serrata      research
-92                Lepiota lilacea      research
-93          Hohenbuehelia thornii      needs_id
-94               Strigamia bidens      needs_id
-95   Trigoniophthalmus alternatus      needs_id
-96            Gastrodes grossipes      needs_id
-97             Chlaenius aestivus      needs_id
-98                          Salix      needs_id
-99                Zelkova serrata      needs_id
-100                       Docosia      needs_id
-101                         Salix      needs_id
-102                  Aulacigaster      needs_id
-103              Andrena hippotes      research
-104             Taphrina betulina      needs_id
-105          Notoedres centrifera      needs_id
-106          Allocapnia granulata      needs_id
+88             Strauzia vittigera      needs_id
+89          Athyroglossa ordinata      research
+90           Dendrothele alliacea      needs_id
+91           Salvia × floriferior      needs_id
+92                Zelkova serrata      research
+93                Lepiota lilacea      research
+94          Hohenbuehelia thornii      needs_id
+95               Strigamia bidens      needs_id
+96   Trigoniophthalmus alternatus      needs_id
+97            Gastrodes grossipes      needs_id
+98             Chlaenius aestivus      needs_id
+99                          Salix      needs_id
+100               Zelkova serrata      needs_id
+101                       Docosia      needs_id
+102                         Salix      needs_id
+103                  Aulacigaster      needs_id
+104              Andrena hippotes      research
+105             Taphrina betulina      needs_id
+106          Notoedres centrifera      needs_id
 107          Allocapnia granulata      needs_id
 108          Allocapnia granulata      needs_id
-109            Ceriporia purpurea      research
-110             Gymnopus foetidus      research</code></pre>
+109          Allocapnia granulata      needs_id
+110            Ceriporia purpurea      research
+111             Gymnopus foetidus      research</code></pre>
+</div>
+<div id="rare-observations-5-on-records-1" class="section level2">
+<h2>Rare observations (&lt;= 5 ON records)</h2>
+<pre class="r"><code>middlesex.5 &lt;- middlesex.species %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count &lt;= 5) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %&gt;% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% middlesex.5$taxon.name) %&gt;%
+  dplyr::select(scientific_name, quality_grade) %&gt;%
+  filter(quality_grade %in% c(&quot;research&quot;,&quot;needs_id&quot;))</code></pre>
+<pre><code>                 scientific_name quality_grade
+1                          Salix      needs_id
+2           Melilotus altissimus      research
+3              Lentinus flexipes      needs_id
+4                 Mycena galopus      needs_id
+5                        Lepiota      needs_id
+6             Atriplex hortensis      needs_id
+7                          Salix      needs_id
+8                 Neopachygaster      needs_id
+9             Trepobates inermis      research
+10                 Triplax aenea      needs_id
+11                Heteromeringia      needs_id
+12                         Geron      needs_id
+13            Trepobates inermis      research
+14         Arhyssus nigristernum      needs_id
+15       Anthopotamus distinctus      needs_id
+16                 Laphria canis      needs_id
+17        Toxorhynchites rutilus      research
+18                    Sarcophaga      needs_id
+19                 Laphria canis      needs_id
+20            Trepobates inermis      research
+21     Clytoleptus albofasciatus      needs_id
+22                        Oodera      needs_id
+23          Lasioglossum pilosum      needs_id
+24        Pissonotus aphidioides      research
+25              Leiobunum flavum      needs_id
+26                        Oodera      needs_id
+27           Volvariella pusilla      research
+28               Aulacus burquei      research
+29                   Dectes sayi      research
+30               Laphria sericea      needs_id
+31           Entoloma byssisedum      needs_id
+32                    Sarcophaga      needs_id
+33                         Salix      needs_id
+34                 Laphria canis      needs_id
+35                    Sarcophaga      needs_id
+36                 Laphria canis      needs_id
+37 Cordyligaster septentrionalis      needs_id
+38            Enchenopa binotata      needs_id
+39                 Laphria canis      needs_id
+40                 Myrmex myrmex      needs_id
+41     Evacanthus nigramericanus      needs_id
+42                Minettia magna      research
+43                 Laphria canis      needs_id
+44             Acalles carinatus      needs_id
+45                   Coprinellus      needs_id
+46               Ilnacora malina      needs_id
+47                       Stegana      needs_id
+48                Puccinia allii      research
+49                 Laphria canis      needs_id
+50            Metapelma schwarzi      needs_id
+51             Neurigona rubella      research
+52           Geranomyia communis      needs_id
+53                   Ablabesmyia      needs_id
+54       Lasiopogon tetragrammus      needs_id
+55                    Sarcophaga      needs_id
+56                    Sarcophaga      needs_id
+57                Salvia sclarea      research
+58                         Salix      needs_id
+59      Aureobasidium apocryptum      research
+60      Aureobasidium apocryptum      research
+61      Aureobasidium apocryptum      needs_id
+62               Laphria sericea      needs_id
+63            Leptopeza flavipes      research
+64         Athyroglossa ordinata      research
+65          Dendrothele alliacea      needs_id
+66          Salvia × floriferior      needs_id
+67               Lepiota lilacea      research
+68         Hohenbuehelia thornii      needs_id
+69              Strigamia bidens      needs_id
+70            Chlaenius aestivus      needs_id
+71                         Salix      needs_id
+72                       Docosia      needs_id
+73                         Salix      needs_id
+74          Notoedres centrifera      needs_id
+75            Ceriporia purpurea      research
+76             Gymnopus foetidus      research</code></pre>
+</div>
+<div id="rare-observations-3-on-records-1" class="section level2">
+<h2>Rare observations (&lt;= 3 ON records)</h2>
+<pre class="r"><code>middlesex.3 &lt;- middlesex.species %&gt;% # This project is the biodiversity of Ontario - which should give us all of the unique taxa in ON
+  filter(count &lt;= 3) # Pull out taxa that have less than or equal to 10 in ON
+
+observations %&gt;% # filter the inventory records that match the taxa above
+  filter(scientific_name %in% middlesex.3$taxon.name) %&gt;%
+  dplyr::select(scientific_name, quality_grade) %&gt;%
+  filter(quality_grade %in% c(&quot;research&quot;,&quot;needs_id&quot;))</code></pre>
+<pre><code>           scientific_name quality_grade
+1                    Salix      needs_id
+2        Lentinus flexipes      needs_id
+3                  Lepiota      needs_id
+4                    Salix      needs_id
+5           Neopachygaster      needs_id
+6       Trepobates inermis      research
+7            Triplax aenea      needs_id
+8           Heteromeringia      needs_id
+9       Trepobates inermis      research
+10 Anthopotamus distinctus      needs_id
+11           Laphria canis      needs_id
+12  Toxorhynchites rutilus      research
+13              Sarcophaga      needs_id
+14           Laphria canis      needs_id
+15      Trepobates inermis      research
+16    Lasioglossum pilosum      needs_id
+17  Pissonotus aphidioides      research
+18             Dectes sayi      research
+19         Laphria sericea      needs_id
+20              Sarcophaga      needs_id
+21                   Salix      needs_id
+22           Laphria canis      needs_id
+23              Sarcophaga      needs_id
+24           Laphria canis      needs_id
+25      Enchenopa binotata      needs_id
+26           Laphria canis      needs_id
+27           Myrmex myrmex      needs_id
+28          Minettia magna      research
+29           Laphria canis      needs_id
+30       Acalles carinatus      needs_id
+31             Coprinellus      needs_id
+32          Puccinia allii      research
+33           Laphria canis      needs_id
+34      Metapelma schwarzi      needs_id
+35       Neurigona rubella      research
+36             Ablabesmyia      needs_id
+37 Lasiopogon tetragrammus      needs_id
+38              Sarcophaga      needs_id
+39              Sarcophaga      needs_id
+40          Salvia sclarea      research
+41                   Salix      needs_id
+42         Laphria sericea      needs_id
+43      Leptopeza flavipes      research
+44   Athyroglossa ordinata      research
+45    Dendrothele alliacea      needs_id
+46    Salvia × floriferior      needs_id
+47         Lepiota lilacea      research
+48   Hohenbuehelia thornii      needs_id
+49        Strigamia bidens      needs_id
+50                   Salix      needs_id
+51                   Salix      needs_id
+52    Notoedres centrifera      needs_id
+53      Ceriporia purpurea      research</code></pre>
 </div>
 <div id="middlesex-county-first-firsts" class="section level2">
 <h2>Middlesex county first firsts</h2>
